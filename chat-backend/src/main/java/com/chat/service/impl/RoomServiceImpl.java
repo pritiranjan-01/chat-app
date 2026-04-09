@@ -8,7 +8,9 @@ import com.chat.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +38,7 @@ public class RoomServiceImpl implements RoomService {
             Message message = new Message();
             message.setContent(request.getContent());
             message.setSender(request.getSender());
-            message.setTimestamp(LocalDateTime.now());
+            message.setTimestamp(Instant.now()); // Store in UTC;
 
             room.getMessages().add(message);
             roomRepository.save(room);

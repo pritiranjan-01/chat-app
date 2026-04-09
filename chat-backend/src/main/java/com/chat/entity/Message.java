@@ -2,6 +2,7 @@ package com.chat.entity;
 
 import lombok.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter
@@ -13,12 +14,12 @@ public class Message {
 
     private String sender;
     private String content;
-    private LocalDateTime timestamp;
+    private Instant timestamp;
 
     public Message(String content, String sender) {
         this.content = content;
         this.sender = sender;
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = Instant.now();
     }
 
 }
