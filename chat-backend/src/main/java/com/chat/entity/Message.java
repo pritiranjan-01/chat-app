@@ -3,7 +3,6 @@ package com.chat.entity;
 import lombok.*;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
