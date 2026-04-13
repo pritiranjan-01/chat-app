@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @Service
 @RequiredArgsConstructor
@@ -35,11 +33,13 @@ public class RoomServiceImpl implements RoomService {
         Room room = roomRepository.findByRoomId(request.getRoomId());
 
         if (room != null) {
+            // Prepare message Object
             Message message = new Message();
             message.setContent(request.getContent());
             message.setSender(request.getSender());
             message.setTimestamp(Instant.now()); // Store in UTC;
 
+            // Add new message Object with the existing messages
             room.getMessages().add(message);
             roomRepository.save(room);
             return message;

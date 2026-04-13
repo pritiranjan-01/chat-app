@@ -16,10 +16,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker("/topic");
 
         // /app/chat
-        // server controller @MessagingMapping(/chat)
+        // It transfers request coming with prefix /app to controller @MessagingMapping(/chat)
         registry.setApplicationDestinationPrefixes("/app");
     }
 
+
+    // Server side handshaking happens here.
+    // This is the endpoint which will be used by the client to connect to the server 
+    // and using this endpoint we will create a websocket connection.
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/chat") // connection establishment
