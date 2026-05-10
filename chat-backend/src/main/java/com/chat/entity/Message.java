@@ -11,11 +11,11 @@ import java.time.Instant;
 @NoArgsConstructor
 public class Message {
 
-    private String sender;
+    private User sender;
     private String content;
     private Instant timestamp;
 
-    public Message(String content, String sender) {
+    public Message(String content, User sender) {
         this.content = content;
         this.sender = sender;
         this.timestamp = Instant.now();

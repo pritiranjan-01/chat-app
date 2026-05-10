@@ -58,4 +58,8 @@ public class RoomController {
 
         return ResponseEntity.ok(ApiResponse.success("Messages fetched", paginatedMessage));
     }
+
+    public List<Room> getRooms() {
+        return roomService.getAllRooms();
+    }
 }
