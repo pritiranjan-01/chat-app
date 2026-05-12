@@ -3,12 +3,14 @@ package com.chat.service.impl;
 import com.chat.dto.MessageRequest;
 import com.chat.entity.Message;
 import com.chat.entity.Room;
+import com.chat.entity.User;
 import com.chat.repository.RoomRepository;
 import com.chat.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,4 +50,16 @@ public class RoomServiceImpl implements RoomService {
             throw new RuntimeException("Room not found");
         }
     }
+
+    @Override
+    public List<Room> getAllRooms() {
+        return roomRepository.findAll();
+    }
+
+    @Override
+    public List<User> getAllUsersfromRoomByRoomId(String roomId) {
+        return roomRepository.findAllByRoomId(roomId);
+    }
+
+
 }

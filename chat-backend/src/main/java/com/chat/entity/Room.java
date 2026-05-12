@@ -19,6 +19,9 @@ public class Room {
     @Id
     private String id; // mongodb unique id
 
-    private String roomId;
+    private String roomId; // UUID
+    private String roomName;
+    private String roomDescription;
+    private List<User> roomUsers;
     private List<Message> messages = new ArrayList<>();
 }
