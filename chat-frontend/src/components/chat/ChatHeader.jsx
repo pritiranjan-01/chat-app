@@ -5,7 +5,13 @@ import { MdArrowBack, MdInfo } from "react-icons/md";
  * Top bar for the chat page.
  * Shows room name, member count, connection status, and action buttons.
  */
-const ChatHeader = ({ room, connected, sidebarOpen, onToggleSidebar, onLeave }) => {
+const ChatHeader = ({
+  room,
+  connected,
+  sidebarOpen,
+  onToggleSidebar,
+  onLeave,
+}) => {
   const memberCount = room?.users?.length ?? room?.userIds?.length ?? 0;
 
   return (
@@ -24,7 +30,9 @@ const ChatHeader = ({ room, connected, sidebarOpen, onToggleSidebar, onLeave }) 
           </p>
           <p className="text-xs text-gray-400 dark:text-gray-500">
             {memberCount} member{memberCount !== 1 ? "s" : ""} -{" "}
-            <span className="text-green-400">{connected ? "Connected" : "Connecting..."}</span>
+            <span className="text-green-400">
+              {connected ? "Connected" : "Connecting..."}
+            </span>
           </p>
         </div>
       </div>
@@ -36,8 +44,8 @@ const ChatHeader = ({ room, connected, sidebarOpen, onToggleSidebar, onLeave }) 
           onClick={onToggleSidebar}
           className={`p-2 rounded-full transition ${
             sidebarOpen
-              ? "bg-blue-500 text-white"
-              : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200"
+              ? "bg-blue-500 text-white hover:bg-blue-800"
+              : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-500"
           }`}
           title="Toggle room info"
         >

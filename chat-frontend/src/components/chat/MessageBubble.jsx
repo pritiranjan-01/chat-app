@@ -21,8 +21,18 @@ const MessageBubble = ({ msg, isOwn, user }) => (
   >
     {/* Avatar for others */}
     {!isOwn && (
-      <div className="w-7 h-7 rounded-full bg-indigo-500 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0 mb-1">
-        {msg.senderId?.substring(0, 2).toUpperCase() || "?"}
+      <div className="flex-shrink-0 mb-1">
+        {user?.profilePicture ? (
+          <img
+            src={user.profilePicture}
+            alt={user?.name || "User"}
+            className="w-7 h-7 rounded-full object-cover"
+          />
+        ) : (
+          <div className="w-7 h-7 rounded-full bg-indigo-500 flex items-center justify-center text-white text-[10px] font-bold">
+            {getInitials(user?.name || msg.senderId)}
+          </div>
+        )}
       </div>
     )}
 
