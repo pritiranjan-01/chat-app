@@ -20,5 +20,4 @@ public class FileUploadController {
     public Boolean deleteFile(@RequestParam String imgUrl) {
         return fileUploadService.delete(imgUrl);
     }
-
 }
