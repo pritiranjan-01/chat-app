@@ -7,7 +7,15 @@ import React from "react";
 const RoomSidebar = ({ room, currentUser }) => {
   const members =
     room?.users ?? (room?.userIds || []).map((id) => ({ id, name: id }));
-  const memberCount = members.length;
+
+  // Sort members so currentUser is always first
+  const sortedMembers = [...members].sort((a, b) => {
+    if (a.id === currentUser?.id) return -1;
+    if (b.id === currentUser?.id) return 1;
+    return 0;
+  });
+
+  const memberCount = sortedMembers.length;
 
   return (
     <aside className="hidden sm:flex flex-col w-72 bg-white dark:bg-gray-900 border-l dark:border-gray-800 flex-shrink-0">
@@ -33,14 +41,22 @@ const RoomSidebar = ({ room, currentUser }) => {
           <p className="text-xs text-gray-400">No members yet.</p>
         ) : (
           <div className="space-y-2">
-            {members.map((member, i) => (
+            {sortedMembers.map((member, i) => (
               <div key={member.id} className="flex items-center gap-2.5">
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                  style={{ background: `hsl(${(i * 67) % 360}, 65%, 50%)` }}
-                >
-                  {(member.name || member.id).substring(0, 2).toUpperCase()}
-                </div>
+                {member.profilePicture ? (
+                  <img
+                    src={member.profilePicture}
+                    alt={member.name || "Member"}
+                    className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                  />
+                ) : (
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                    style={{ background: `hsl(${(i * 67) % 360}, 65%, 50%)` }}
+                  >
+                    {(member.name || member.id).substring(0, 2).toUpperCase()}
+                  </div>
+                )}
                 <div className="min-w-0">
                   <p className="text-xs font-medium text-gray-700 dark:text-gray-300 truncate">
                     {member.id === currentUser?.id

@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import toast from "react-hot-toast";
-import { getMessagesApi, getRoomApi, leaveRoomApi } from "../../service/RoomService";
+import { getMessagesApi, getRoomApi, leaveRoomApi, joinRoomApi } from "../../service/RoomService";
 import { baseURL } from "../../config/AxiosHelper";
 import ChatHeader from "./ChatHeader";
 import MessageList from "./MessageList";
@@ -28,21 +28,25 @@ const ChatPage = () => {
     if (!isLoggedIn) navigate("/");
   }, [isLoggedIn, navigate]);
 
-  // Fetch room details
+  // Fetch room details and ensure membership
   useEffect(() => {
     if (!roomId || !isLoggedIn) return;
-    getRoomApi(roomId)
-      .then((res) => setRoom(res.data))
-      .catch(() => {});
-    
-    // Refetch room data after 1 second to get updated member count after joining
-    const timer = setTimeout(() => {
-      getRoomApi(roomId)
-        .then((res) => setRoom(res.data))
-        .catch(() => {});
-    }, 1000);
-    
-    return () => clearTimeout(timer);
+
+    const initRoom = async () => {
+      try {
+        // Ensure user is in the room (handles membership vanishing on page refresh)
+        await joinRoomApi(roomId);
+        const res = await getRoomApi(roomId);
+        setRoom(res.data);
+      } catch (err) {
+        // If join fails, still try to fetch room
+        getRoomApi(roomId)
+          .then((res) => setRoom(res.data))
+          .catch(() => {});
+      }
+    };
+
+    initRoom();
   }, [roomId, isLoggedIn]);
 
   // Load message history
@@ -130,7 +134,7 @@ const ChatPage = () => {
       />
 
       <div className="flex flex-1 overflow-hidden">
-        <MessageList messages={messages} currentUser={user} chatBoxRef={chatBoxRef} />
+        <MessageList messages={messages} currentUser={user} chatBoxRef={chatBoxRef} room={room} />
         {sidebarOpen && <RoomSidebar room={room} currentUser={user} />}
       </div>
 

@@ -73,7 +73,7 @@ const UserMenu = ({ onLogout }) => {
 
         {/* Dropdown */}
         {open && (
-          <div className="absolute right-0 top-full mt-2 w-52 glass rounded-xl shadow-2xl border border-white/10 py-1.5 z-50 animate-fade-in">
+          <div className="absolute right-0 top-full mt-2 w-52 bg-[#111827] rounded-xl shadow-2xl border border-white/10 py-1.5 z-50 animate-fade-in">
             <div className="px-4 py-3 border-b border-white/8">
               <p className="text-sm font-semibold text-white truncate">
                 {user?.name}
