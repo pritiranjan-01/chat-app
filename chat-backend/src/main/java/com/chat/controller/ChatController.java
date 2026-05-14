@@ -16,15 +16,14 @@ public class ChatController {
 
     private final RoomService roomService;
 
-
     // For sending and receiving messages
 
-    @MessageMapping("/sendMessage/{roomId}") // Receiving a Message send from Client /app/sendMessage/{roomId}
-    @SendTo("/topic/room/{roomId}") // Subscribe : Tell all the clients connected to this topic
+    @MessageMapping("/sendMessage/{id}") // Client sends to: /app/sendMessage/{id}
+    @SendTo("/topic/room/{id}")           // Server broadcasts to: /topic/room/{id}
     public Message sendMessage(
-            @Payload  MessageRequest request,
-            @DestinationVariable String roomId
+            @Payload MessageRequest request,
+            @DestinationVariable String id
     ) {
-       return roomService.updateRoomMessage(request);
+        return roomService.updateRoomMessage(request);
     }
 }

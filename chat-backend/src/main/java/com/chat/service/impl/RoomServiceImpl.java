@@ -1,15 +1,14 @@
 package com.chat.service.impl;
 
 import com.chat.dto.MessageRequest;
+import com.chat.dto.RoomRequest;
 import com.chat.entity.Message;
 import com.chat.entity.Room;
-import com.chat.entity.User;
 import com.chat.repository.RoomRepository;
 import com.chat.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -19,34 +18,33 @@ public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
 
     @Override
-    public Room findByRoomId(String roomId) {
-        return roomRepository.findByRoomId(roomId);
+    public Room findById(String id) {
+        return roomRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Room createRoom(String roomId) {
-        Room room = new Room();
-        room.setRoomId(roomId);
+    public Room createRoom(RoomRequest request, String userId) {
+        int size = (request.getRoomSize() != null && request.getRoomSize() > 0) ? request.getRoomSize() : 10;
+        Room room = Room.builder()
+                .roomName(request.getRoomName())
+                .roomDescription(request.getRoomDescription())
+                .roomSize(size)
+                .createdBy(userId)
+                .build();
+        // MongoDB auto-generates the id on save
         return roomRepository.save(room);
     }
 
     @Override
     public Message updateRoomMessage(MessageRequest request) {
-        Room room = roomRepository.findByRoomId(request.getRoomId());
+        Room room = roomRepository.findById(request.getRoomId()).orElse(null);
 
         if (room != null) {
-            // Prepare message Object
-            Message message = new Message();
-            message.setContent(request.getContent());
-            message.setSender(request.getSender());
-            message.setTimestamp(Instant.now()); // Store in UTC;
-
-            // Add new message Object with the existing messages
+            Message message = new Message(request.getRoomId(), request.getSenderId(), request.getContent());
             room.getMessages().add(message);
             roomRepository.save(room);
             return message;
-        }
-        else {
+        } else {
             throw new RuntimeException("Room not found");
         }
     }
@@ -57,9 +55,34 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<User> getAllUsersfromRoomByRoomId(String roomId) {
-        return roomRepository.findAllByRoomId(roomId);
+    public Room joinRoom(String id, String userId) {
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+
+        if (room.getUserIds().size() >= room.getRoomSize()) {
+            throw new RuntimeException("Room is full (max " + room.getRoomSize() + " members)");
+        }
+        // Idempotent: only add if not already a member
+        if (!room.getUserIds().contains(userId)) {
+            room.getUserIds().add(userId);
+            roomRepository.save(room);
+        }
+        return room;
     }
 
+    @Override
+    public Room leaveRoom(String id, String userId) {
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+
+        room.getUserIds().remove(userId);
+        roomRepository.save(room);
+        return room;
+    }
+
+    @Override
+    public void deleteRoom(String id) {
+        roomRepository.deleteById(id);
+    }
 
 }

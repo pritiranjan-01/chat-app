@@ -1,44 +1,68 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 const ChatContext = createContext();
 
 export const ChatProvider = ({ children }) => {
-  const [roomId, setRoomId] = useState(() => sessionStorage.getItem("roomId") || "");
-  const [currentUser, setCurrentUser] = useState(() => sessionStorage.getItem("currentUser") || "");
-  const [connected, setConnected] = useState(() => sessionStorage.getItem("connected") === "true");
-  const [darkMode, setDarkMode] = useState(() => sessionStorage.getItem("darkMode") !== "false");
+  // ── Auth state ─────────────────────────────────────────────
+  const [token, setToken] = useState(
+    () => localStorage.getItem("token") || null,
+  );
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("user");
+    return saved ? JSON.parse(saved) : null;
+  });
 
-  useEffect(() => {
-    sessionStorage.setItem("roomId", roomId);
-    sessionStorage.setItem("currentUser", currentUser);
-    sessionStorage.setItem("connected", connected);
-    sessionStorage.setItem("darkMode", darkMode);
-  }, [roomId, currentUser, connected, darkMode]);
+  // ── Chat state ─────────────────────────────────────────────
+  const [roomId, setRoomId] = useState("");
+  const [connected, setConnected] = useState(false);
 
-  useEffect(() => {
-    const root = document.documentElement;
-    if (darkMode) {
-      root.classList.add("dark");
-      root.classList.remove("light");
-    } else {
-      root.classList.add("light");
-      root.classList.remove("dark");
-    }
-  }, [darkMode]);
+  // ── Auth helpers ───────────────────────────────────────────
+  const login = useCallback((jwtToken, userObj) => {
+    localStorage.setItem("token", jwtToken);
+    localStorage.setItem("user", JSON.stringify(userObj));
+    setToken(jwtToken);
+    setUser(userObj);
+  }, []);
+
+  const logout = useCallback(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setToken(null);
+    setUser(null);
+    setRoomId("");
+    setConnected(false);
+  }, []);
+
+  /** Call after a profile update to keep context in sync with the server response */
+  const updateUser = useCallback((updatedUser) => {
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+    setUser(updatedUser);
+  }, []);
+
+  const value = useMemo(
+    () => ({
+      token,
+      user,
+      login,
+      logout,
+      updateUser,
+      isLoggedIn: !!token,
+      roomId,
+      setRoomId,
+      connected,
+      setConnected,
+    }),
+    [token, user, login, logout, updateUser, roomId, connected],
+  );
 
   return (
-    <ChatContext.Provider
-      value={{
-        roomId,
-        currentUser,
-        connected,
-        setRoomId,
-        setCurrentUser,
-        setConnected,
-        darkMode,
-        setDarkMode,
-      }}
-    >
+    <ChatContext.Provider value={value}>
       {children}
     </ChatContext.Provider>
   );

@@ -1,15 +1,6 @@
-import { useState } from "react";
-import toast from "react-hot-toast";
-import JoinCreateChat from "./components/JoinCreateChat";
-
-function App() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div>
-      <JoinCreateChat />
-    </div>
-  );
+// App.jsx is intentionally minimal.
+// All routing is handled by src/config/routes.jsx
+// All pages are in src/components/
+export default function App() {
+  return null;
 }
-
-export default App;

@@ -13,6 +13,6 @@ import lombok.Setter;
 public class MessageRequest {
 
     private String content;
-    private User sender;
+    private String senderId;
     private String roomId;
 }
