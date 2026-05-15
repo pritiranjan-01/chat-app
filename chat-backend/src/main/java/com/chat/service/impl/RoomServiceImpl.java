@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +41,9 @@ public class RoomServiceImpl implements RoomService {
         Room room = roomRepository.findById(request.getRoomId()).orElse(null);
 
         if (room != null) {
-            Message message = new Message(request.getRoomId(), request.getSenderId(), request.getContent());
+            Message message = new Message(request.getSenderId(), request.getContent());
             room.getMessages().add(message);
+
             roomRepository.save(room);
             return message;
         } else {

@@ -1,12 +1,9 @@
 package com.chat.entity;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.time.Instant;
+import java.util.UUID;
 
-@Document
 @Getter
 @Setter
 @ToString
@@ -15,15 +12,13 @@ import java.time.Instant;
 @Builder
 public class Message {
 
-    @Id
     private String id;
-    private String roomId;
     private String senderId;
     private String content;
     private Instant timestamp;
 
-    public Message(String roomId, String senderId, String content) {
-        this.roomId = roomId;
+    public Message(String senderId, String content) {
+        this.id = UUID.randomUUID().toString();
         this.senderId = senderId;
         this.content = content;
         this.timestamp = Instant.now();
