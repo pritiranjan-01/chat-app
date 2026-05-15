@@ -49,7 +49,7 @@ public class SecurityConfigs {
                 .addFilterBefore(jwtFilter,  UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/user/register", "/user/login", "/", "/chat/**",
+                        .requestMatchers("/user/register", "/user/login", "/", "/chat/**","/actuator/health",
                                      "/v3/api-docs/**", "/swagger-ui/**","/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.GET, "/room").permitAll()
                         .anyRequest().authenticated()
