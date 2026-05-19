@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class RoomController {
     // ── Create ────────────────────────────────────────────────
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createRoom(
-            @RequestBody RoomRequest roomRequest,
+            @Valid @RequestBody RoomRequest roomRequest,
             Authentication authentication) {
         User user = userService.findByEmail(authentication.getName());
         Room room = roomService.createRoom(roomRequest, user.getId());
