@@ -40,14 +40,15 @@ const RoomGrid = ({ rooms, loading, onRoomClick, onCleanUpRoom, onCreateRoom }) 
           <p className="text-sm mt-1">Be the first — create a room above.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 justify-items-center">
           {rooms.map((room) => (
-            <RoomCard
-              key={room.id}
-              room={room}
-              onClick={() => onRoomClick(room)}
-              onCleanUp={() => onCleanUpRoom(room)}
-            />
+            <div key={room.id} className="w-full max-w-[280px]">
+              <RoomCard
+                room={room}
+                onClick={() => onRoomClick(room)}
+                onCleanUp={() => onCleanUpRoom(room)}
+              />
+            </div>
           ))}
         </div>
       )}
