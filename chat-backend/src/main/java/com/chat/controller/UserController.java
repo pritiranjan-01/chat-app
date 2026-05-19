@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
@@ -26,7 +27,7 @@ public class UserController {
     // ───────────────────────── Auth ─────────────────────────
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserResponse>> register(@ModelAttribute UserRequest userRequest) {
+    public ResponseEntity<ApiResponse<UserResponse>> register(@Valid @ModelAttribute UserRequest userRequest) {
         User res = userService.save(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponse.success("User Registration Successful", toResponse(res))
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<AuthResponse>> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody AuthRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
@@ -87,7 +88,7 @@ public class UserController {
      */
     @PostMapping("/me/change-password")
     public ResponseEntity<ApiResponse<String>> changePassword(
-            @RequestBody ChangePasswordRequest request,
+            @Valid @RequestBody ChangePasswordRequest request,
             Authentication authentication
     ) {
         User user = userService.findByEmail(authentication.getName());

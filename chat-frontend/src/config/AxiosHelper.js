@@ -19,10 +19,10 @@ httpClient.interceptors.request.use((config) => {
 httpClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      
+
       // Redirect to home page to force re-render in unauthenticated state
       if (window.location.pathname !== "/") {
         window.location.href = "/";
@@ -32,5 +32,5 @@ httpClient.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );

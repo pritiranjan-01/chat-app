@@ -10,6 +10,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
+import jakarta.validation.Valid;
+
 @Controller
 @RequiredArgsConstructor
 public class ChatController {
@@ -21,7 +23,7 @@ public class ChatController {
     @MessageMapping("/sendMessage/{id}") // Client sends to: /app/sendMessage/{id}
     @SendTo("/topic/room/{id}")           // Server broadcasts to: /topic/room/{id}
     public Message sendMessage(
-            @Payload MessageRequest request,
+            @Valid @Payload MessageRequest request,
             @DestinationVariable String id
     ) {
         return roomService.updateRoomMessage(request);
