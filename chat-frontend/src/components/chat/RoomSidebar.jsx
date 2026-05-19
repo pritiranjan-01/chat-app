@@ -18,7 +18,7 @@ const RoomSidebar = ({ room, currentUser }) => {
   const memberCount = sortedMembers.length;
 
   return (
-    <aside className="hidden sm:flex flex-col w-72 bg-white dark:bg-gray-900 border-l dark:border-gray-800 flex-shrink-0">
+    <aside className="absolute right-0 top-0 bottom-0 z-30 sm:static flex flex-col w-72 bg-white dark:bg-gray-900 border-l dark:border-gray-800 flex-shrink-0 shadow-2xl sm:shadow-none">
       {/* Room Info */}
       <div className="p-5 border-b dark:border-gray-800">
         <h3 className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">

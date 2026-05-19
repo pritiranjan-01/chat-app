@@ -34,8 +34,8 @@ const HeroSection = ({ isLoggedIn, onAuthClick, onLogout }) => (
     </header>
 
     {/* Hero Content */}
-    <div className="text-center py-2 px-4">
-      <h1 className="text-xl sm:text-1xl md:text-5xl font-bold text-white leading-tight tracking-tight">
+    <div className="text-center py-10 sm:py-12 px-4">
+      <h1 className="text-xl sm:text-2xl md:text-5xl font-bold text-white leading-tight tracking-tight">
         Talk Freely. Connect Instantly.
       </h1>
       <p className="text-gray-300 mt-6 text-lg leading-relaxed">
