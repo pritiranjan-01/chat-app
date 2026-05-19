@@ -19,7 +19,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [stompClient, setStompClient] = useState(null);
   const [room, setRoom] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 640);
   const inputRef = useRef();
   const chatBoxRef = useRef();
 
@@ -124,7 +124,7 @@ const ChatPage = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col dark:bg-gray-950 bg-gray-100 overflow-hidden">
+    <div className="h-[100dvh] flex flex-col dark:bg-gray-950 bg-gray-100 overflow-hidden">
       <ChatHeader
         room={room}
         connected={connected}
@@ -133,7 +133,7 @@ const ChatPage = () => {
         onLeave={handleLeave}
       />
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
         <MessageList messages={messages} currentUser={user} chatBoxRef={chatBoxRef} room={room} />
         {sidebarOpen && <RoomSidebar room={room} currentUser={user} />}
       </div>

@@ -146,14 +146,14 @@ const HomePage = () => {
       )}
 
       {/* Visible page content — z-index via page-content class */}
-      <div className="page-content">
+      <div className="page-content min-h-[100dvh] flex flex-col">
         <HeroSection 
           isLoggedIn={isLoggedIn} 
           onAuthClick={() => setShowAuthModal(true)}
           onLogout={() => { logout(); toast.success("Logged out"); }}
         />
 
-        <main className="max-w-5xl mx-auto px-4 pb-16">
+        <main className="max-w-5xl mx-auto px-4 pb-16 flex-1 flex flex-col justify-center w-full">
           <RoomGrid
             rooms={rooms}
             loading={loading}
