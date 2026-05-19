@@ -34,15 +34,13 @@ const HeroSection = ({ isLoggedIn, onAuthClick, onLogout }) => (
     </header>
 
     {/* Hero Content */}
-    <div className="text-center py-5 px-4 sm:py-8">
+    <div className="text-center py-2 px-4">
       <h1 className="text-xl sm:text-1xl md:text-5xl font-bold text-white leading-tight tracking-tight">
-        Language Practice Community
+        Talk Freely. Connect Instantly.
       </h1>
-      <p className="text-gray-300 mt-6 text-lg max-w-2xl mx-auto leading-relaxed">
-        Pick a room and start chatting.{" "}
-        {isLoggedIn
-          ? "Or create your own room."
-          : "Sign in to join or create a room."}
+      <p className="text-gray-300 mt-6 text-lg leading-relaxed">
+        Join voice rooms, chat with people worldwide, and build real
+        conversations in real time.
       </p>
     </div>
   </div>
