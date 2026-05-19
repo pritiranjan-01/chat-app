@@ -37,12 +37,17 @@ const MessageBubble = ({ msg, isOwn, user }) => (
     )}
 
     <div
-      className={`max-w-xs sm:max-w-sm lg:max-w-md px-4 py-2.5 rounded-2xl ${
+      className={`max-w-xs sm:max-w-sm lg:max-w-md px-4 py-2.5 rounded-2xl flex flex-col ${
         isOwn
-          ? "bg-blue-500 text-white rounded-br-sm"
-          : "bg-white dark:bg-gray-800 text-gray-800 dark:text-white border dark:border-gray-700 rounded-bl-sm shadow-sm"
+          ? "bg-blue-500 text-white rounded-br-sm items-end"
+          : "bg-white dark:bg-gray-800 text-gray-800 dark:text-white border dark:border-gray-700 rounded-bl-sm shadow-sm items-start"
       }`}
     >
+      {!isOwn && (
+        <span className="text-xs font-semibold text-indigo-500 dark:text-indigo-400 mb-0.5">
+          {user?.name || msg.senderId.substring(0, 10)}
+        </span>
+      )}
       <p className="text-sm leading-relaxed">{msg.content}</p>
       <p
         className={`text-[10px] mt-1 ${isOwn ? "text-blue-200 text-right" : "text-gray-400"}`}
