@@ -37,7 +37,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/chat") // connection establishment
                 .setAllowedOriginPatterns("http://localhost:5173","https://*.vercel.app")
-                .withSockJS();
+                .withSockJS(); // Shock JS is a backup plan as many browser does not support WebSocket.
     }
 
 }
