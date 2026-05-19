@@ -35,7 +35,7 @@ const HomePage = () => {
       .finally(() => setLoading(false));
   }
 
-  useEffect(() => { loadRooms(); }, []);
+  useEffect(() => { loadRooms(); toast.success("Toast works!"); }, []);
 
   // Real-time room updates via STOMP
   useEffect(() => {

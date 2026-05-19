@@ -19,7 +19,13 @@ httpClient.interceptors.request.use((config) => {
 httpClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+    const isLoginRequest = error.config?.url?.includes("/user/login");
+
+    if (
+      error.response &&
+      (error.response.status === 401 || error.response.status === 403) &&
+      !isLoginRequest
+    ) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
 
