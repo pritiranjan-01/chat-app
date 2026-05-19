@@ -14,3 +14,23 @@ httpClient.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// Automatically handle 401 Unauthorized responses
+httpClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      
+      // Redirect to home page to force re-render in unauthenticated state
+      if (window.location.pathname !== "/") {
+        window.location.href = "/";
+      } else {
+        // If already on the home page, just reload to clear state
+        window.location.reload();
+      }
+    }
+    return Promise.reject(error);
+  }
+);
