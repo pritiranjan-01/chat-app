@@ -54,7 +54,7 @@ const ChatHeader = ({
 
         <button
           onClick={onLeave}
-          className="hidden sm:block px-4 py-1.5 rounded-full bg-red-500 hover:bg-red-600 text-white text-xs font-semibold transition"
+          className="px-3 py-1.5 sm:px-4 sm:py-1.5 rounded-full bg-red-500 hover:bg-red-600 text-white text-xs font-semibold transition"
         >
           Leave
         </button>
