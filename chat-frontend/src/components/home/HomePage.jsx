@@ -46,6 +46,7 @@ const HomePage = () => {
 
   // Real-time room updates via STOMP
   useEffect(() => {
+    loadRooms();
     const token = localStorage.getItem("token");
     const sock = new SockJS(`${baseURL}/chat`);
     const client = Stomp.over(sock);
