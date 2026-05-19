@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import useChatContext from "../../context/ChatContext";
-import { getRoomsApi, joinRoomApi, createRoomApi, deleteRoomApi } from "../../service/RoomService";
+import {
+  getRoomsApi,
+  joinRoomApi,
+  createRoomApi,
+  deleteRoomApi,
+} from "../../service/RoomService";
 import { baseURL } from "../../config/AxiosHelper";
 import toast from "react-hot-toast";
 import SockJS from "sockjs-client";
@@ -22,7 +27,11 @@ const HomePage = () => {
   const [pendingAction, setPendingAction] = useState(null);
 
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [createForm, setCreateForm] = useState({ roomName: "", roomDescription: "", roomSize: 10 });
+  const [createForm, setCreateForm] = useState({
+    roomName: "",
+    roomDescription: "",
+    roomSize: 10,
+  });
   const [creating, setCreating] = useState(false);
 
   const { isLoggedIn, logout, setRoomId, setConnected } = useChatContext();
@@ -34,8 +43,6 @@ const HomePage = () => {
       .catch(() => toast.error("Failed to load rooms"))
       .finally(() => setLoading(false));
   }
-
-  useEffect(() => { loadRooms(); toast.success("Toast works!"); }, []);
 
   // Real-time room updates via STOMP
   useEffect(() => {
@@ -51,20 +58,30 @@ const HomePage = () => {
         setRooms((prev) =>
           updatedRoom.deleted
             ? prev.filter((r) => r.id !== updatedRoom.id)
-            : prev.map((r) => (r.id === updatedRoom.id ? updatedRoom : r))
+            : prev.map((r) => (r.id === updatedRoom.id ? updatedRoom : r)),
         );
       });
     });
-    return () => { if (client?.connected) client.disconnect(); };
+    return () => {
+      if (client?.connected) client.disconnect();
+    };
   }, []);
 
   function handleCreateRoomClick() {
-    if (!isLoggedIn) { setPendingAction("create"); setShowAuthModal(true); return; }
+    if (!isLoggedIn) {
+      setPendingAction("create");
+      setShowAuthModal(true);
+      return;
+    }
     setShowCreateModal(true);
   }
 
   async function handleRoomClick(room) {
-    if (!isLoggedIn) { setPendingRoomId(room.id); setShowAuthModal(true); return; }
+    if (!isLoggedIn) {
+      setPendingRoomId(room.id);
+      setShowAuthModal(true);
+      return;
+    }
     try {
       await joinRoomApi(room.id);
       setRoomId(room.id);
@@ -93,22 +110,32 @@ const HomePage = () => {
 
   function handleAuthSuccess({ joinedRoomId }) {
     setShowAuthModal(false);
-    if (joinedRoomId) { navigate(`/chat/${joinedRoomId}`); return; }
-    if (pendingAction === "create") {
-      setPendingAction(null); setPendingRoomId(null); setShowCreateModal(true); return;
+    if (joinedRoomId) {
+      navigate(`/chat/${joinedRoomId}`);
+      return;
     }
-    setPendingRoomId(null); setPendingAction(null);
+    if (pendingAction === "create") {
+      setPendingAction(null);
+      setPendingRoomId(null);
+      setShowCreateModal(true);
+      return;
+    }
+    setPendingRoomId(null);
+    setPendingAction(null);
   }
 
   async function handleCreateRoom(e) {
     e.preventDefault();
-    if (!createForm.roomName.trim()) { toast.error("Room name is required"); return; }
+    if (!createForm.roomName.trim()) {
+      toast.error("Room name is required");
+      return;
+    }
     setCreating(true);
     try {
       const res = await createRoomApi(
         createForm.roomName.trim(),
         createForm.roomDescription.trim(),
-        createForm.roomSize
+        createForm.roomSize,
       );
       toast.success("Room created!");
       setCreateForm({ roomName: "", roomDescription: "", roomSize: 10 });
@@ -130,7 +157,11 @@ const HomePage = () => {
       {/* Modals — portals sit above everything via z-50 */}
       {showAuthModal && (
         <AuthModal
-          onClose={() => { setShowAuthModal(false); setPendingRoomId(null); setPendingAction(null); }}
+          onClose={() => {
+            setShowAuthModal(false);
+            setPendingRoomId(null);
+            setPendingAction(null);
+          }}
           onSuccess={handleAuthSuccess}
           pendingRoomId={pendingRoomId}
         />
@@ -138,7 +169,9 @@ const HomePage = () => {
       {showCreateModal && (
         <CreateRoomModal
           form={createForm}
-          onChange={(field, value) => setCreateForm((prev) => ({ ...prev, [field]: value }))}
+          onChange={(field, value) =>
+            setCreateForm((prev) => ({ ...prev, [field]: value }))
+          }
           onSubmit={handleCreateRoom}
           onClose={() => setShowCreateModal(false)}
           creating={creating}
@@ -147,10 +180,13 @@ const HomePage = () => {
 
       {/* Visible page content — z-index via page-content class */}
       <div className="page-content min-h-[100dvh] flex flex-col">
-        <HeroSection 
-          isLoggedIn={isLoggedIn} 
+        <HeroSection
+          isLoggedIn={isLoggedIn}
           onAuthClick={() => setShowAuthModal(true)}
-          onLogout={() => { logout(); toast.success("Logged out"); }}
+          onLogout={() => {
+            logout();
+            toast.success("Logged out");
+          }}
         />
 
         <main className="max-w-5xl mx-auto px-4 pb-16 flex-1 flex flex-col w-full mt-4">
