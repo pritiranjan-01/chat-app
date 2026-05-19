@@ -153,7 +153,7 @@ const HomePage = () => {
           onLogout={() => { logout(); toast.success("Logged out"); }}
         />
 
-        <main className="max-w-5xl mx-auto px-4 pb-16 flex-1 flex flex-col justify-center w-full">
+        <main className="max-w-5xl mx-auto px-4 pb-16 flex-1 flex flex-col w-full mt-4">
           <RoomGrid
             rooms={rooms}
             loading={loading}
