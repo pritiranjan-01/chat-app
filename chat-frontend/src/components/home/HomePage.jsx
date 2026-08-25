@@ -94,6 +94,14 @@ const HomePage = () => {
   }
 
   async function handleCleanUpRoom(room) {
+    // Deleting a room is protected. Guard this before calling the API so an
+    // anonymous click opens the sign-in flow instead of receiving a 403 (which
+    // the Axios interceptor handles by reloading the page).
+    if (!isLoggedIn) {
+      setShowAuthModal(true);
+      return;
+    }
+
     const memberCount = room.users?.length ?? room.userIds?.length ?? 0;
     if (memberCount > 0) {
       toast.error("Only empty rooms can be cleaned up");
