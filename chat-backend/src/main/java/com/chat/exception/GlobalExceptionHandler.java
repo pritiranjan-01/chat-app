@@ -93,7 +93,7 @@ public class GlobalExceptionHandler {
         if ("Profile picture must be an image".equalsIgnoreCase(ex.getMessage())) {
             return error(HttpStatus.BAD_REQUEST, "Profile picture must be an image");
         }
-        return error(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+        return error(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong. " + ex.getMessage() );
     }
 
      @ExceptionHandler(Exception.class)
